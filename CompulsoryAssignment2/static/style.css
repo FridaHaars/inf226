@@ -1,0 +1,155 @@
+* {
+    box-sizing: border-box;
+}
+
+#page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    background-color: #F9B572;
+}
+
+main {
+    border-color: #0F0F0F;
+    box-shadow: 0 0 5px 5px #748e6348;
+    background-color:#FAF8ED;
+    /* min-height: 50%; */
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: auto;
+    border-radius: 10px;
+}
+
+body {
+    margin: 0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #0F0F0F;
+}
+
+label {
+    justify-self: end;
+}
+
+.users,
+.user {
+    border: 1px solid #0F0F0F;
+    padding: 0.2rem;
+    border-radius: 10px;
+    background-color: user[key];
+}
+
+.users {
+    margin: 0.5rem 1rem;
+    background-color:#99b0809f;
+}
+
+.user {
+    margin: 0.2rem 0;
+    position: relative;
+    padding: 0.5rem;
+    min-height: calc(4rem + 2rem);
+    display: flex;
+    flex-direction: row;
+    background-color:  #FAF8ED;
+}
+
+form.user {
+    flex-direction: column;
+    background-color: #99b08081;
+}
+
+form label {
+    min-width: 15rem;
+    text-align: right;
+    display: inline-block;
+    margin: 0.25rem;
+    color: #3D405B;
+}
+form label::after {
+    content: ': ';
+    color: #3D405B;
+}
+.user.me .username::after {
+    content: ' ← that’s me!';
+    margin-left: 1rem;
+    font-size: smaller;
+    
+}
+
+.user .data {
+    flex-grow: 1;
+}
+
+.user .controls {
+    flex-grow: 0;
+    margin-left: 0.5rem;
+
+}
+.user img {
+    max-width: 8rem;
+    max-height: 8rem;
+    border: 1px solid #444;
+    margin-right: 0.5rem;
+    border-radius: 100px;
+}
+
+.field {
+    margin: 0;
+    display: block;
+    color:#3D405B;
+}
+.field .key::after {
+    content: ': ';
+    color: #E07A5F ;
+}
+form .error {
+    color: #a00;
+}
+
+.user .more {
+    display: none;
+    
+}
+
+.user.open .more {
+    display: block;
+    
+}
+
+.color-sample {
+    border: 1px solid black;
+    display: inline-block;
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    
+}
+
+.button {
+    background-color: #3D405B;
+    color: #F4F1DE;
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.button:hover {
+    background-color: #9096d1;
+}
+
+.custom-input {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 10px;
+}
+
+h1 {
+    margin-left: 30px;
+}
+
+p {
+    margin-left: 30px;
+}

@@ -1,0 +1,22 @@
+{% extends "_layout.html.j2" %}
+{% from "_field.html.j2" import render_field %}
+{% block title %}Edit profile{% endblock %}
+{% block content %}
+        <form class="user" novalidate method="post" nonce="{{g.csp_nonce}}">
+
+                {{ render_field(form.username) }}
+                {{ render_field(form.password, autocomplete="new-password") }}
+                {{ render_field(form.password_again, autocomplete="new-password") }}
+                {{ render_field(form.birthdate) }}
+                {{ render_field(form.color, '<div class="color-sample" style="background-color: '+ form.color.data +'"></div>') }}
+                 
+                {{ render_field(form.picture_url) }}
+                {% if form.picture_url.data %}
+                    <img src="{{form.picture_url.data|e}}" alt="{{form.username.data}}'s profile picture">
+                {% endif %}
+                {{ render_field(form.about) }}
+            <p>
+            {{ form.save }}
+            {{ form.csrf_token }}
+        </form>
+{% endblock %}

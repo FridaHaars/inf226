@@ -1,0 +1,13 @@
+{% for user in users %}
+    {% for key in user %}
+        <li class="field">
+            <span class="key">{{ key }}</span> <span class="value" nonce="{{ g.csp_nonce }}">{{ user[key]|e }} </span>
+            {% if key == 'picture_url' %}
+                <img src="{{ user[key]|e }}" alt="{{ user['username'] }}'s profile picture"/>
+            {% endif %}
+            {% if key == 'color' %}
+                <div class="color-sample" style="background-color:{{ user[key]|e }}"></div>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endfor %}
