@@ -8,12 +8,11 @@
 
 ### Set up virtual environment and install dependencies
 
-Use the [`venv`](https://docs.python.org/3/library/venv.html) command to create a virtual environment. E.g., on Unix (see web page for how to use it on Windows and with non-Bourne-like shells):
+Use the [`venv`](https://docs.python.org/3/library/venv.html) command to create a virtual environment. Windows::
 
 ```sh
-cd 226book
-python -m venv .venv  # or possibly python3
-. .venv/bin/activate  # yes there's a dot at the beginning of the line
+python -m venv .venv  # or possibly python3 or py
+.venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
@@ -25,7 +24,7 @@ You can exit the virtual environment with the command `deactivate`.
 flask -A headbook:app run --reload
 ```
 
-### NOTE: Additional Libraries
+### Additional Libraries
 
 `colour` is required for `validate_info.py` in order to check user input on profile. 
 
@@ -46,7 +45,7 @@ Goal: *Delete users in user database through SQL injection!*
 
 Running the program gives the following output in terminal as users are added to database `users.db`
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/1.png?ref_type=heads "Terminal output upon first run")
+![alt text](https://github.com/FridaHaars/inf226/tree/main/CompulsoryAssignment2/static/screenshots/1.png "Terminal output upon first run")
  
 I thus have the login credentials etc. to two users alice and bob (they are also blatantly exposed in source code). Inspecting the site in the browser debugger I can also see the two usernames in debugging `script.js`, and bruteforcing their passwords might not be much of a challenge due to their simplicity.
 
@@ -154,7 +153,7 @@ I also added birthdate/profile picture manually.
 ...and then implemented the SQL injection prevention measures again. 
 
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/2.png?ref_type=heads "HeadBook profiles")
+![alt text](https://github.com/FridaHaars/inf226/blob/main/CompulsoryAssignment2/static/screenshots/2.png "HeadBook profiles")
 
 
 
@@ -173,7 +172,7 @@ I changed the About-section in my profile to read the following:
 
 Now, when a user clicks on my profile, an alert pops up:
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/3.png?ref_type=heads "Alert")
+![alt text](https://github.com/FridaHaars/inf226/blob/main/CompulsoryAssignment2/static/screenshots/3.png "Alert")
 
 Thus I have altered the application by injecting my own executable code in a form that is executed in the browser. 
 
@@ -201,7 +200,7 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
 
 When I visit http://127.0.0.1:5000/users/me, a page that looks like a simplified version of my profile is loaded:
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/4.png?ref_type=heads "Profile details on /users/me")
+![alt text](https://github.com/FridaHaars/inf226/blob/main/CompulsoryAssignment2/static/screenshots/4.png "Profile details on /users/me")
 
 This page just conveys the contents saved in the logged in user's profile. The line `<img src="" onerror=alert('hacked!')>` holds no power because it is **not executed**, it is just represented as plain text. Thus the code injection no longer works.
 
@@ -213,7 +212,7 @@ I used `µhtml` templates in order to fix the code injection problems in script.
 
 Now, the formerly malicious line `<img src="" onerror=alert('hacked!')>` from my `About:`-section is represented as harmless text, and is not executed when a user clicks on my profile:
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/5.png?ref_type=heads "Home page after implementing with µhtml")
+![alt text](https://github.com/FridaHaars/inf226/blob/main/CompulsoryAssignment2/static/screenshots/5.png "Home page after implementing with µhtml")
 
 *Sources*
 https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML
@@ -229,7 +228,7 @@ https://github.com/WebReflection/uhtml/blob/main/DOCUMENTATION.md
 
 Passwords are stores *unhashed* in the database `users.db`. `app.py` imports `generate_password_hash` and `check_password_hash` from the `werkzeug.security` library, but these functions are never actually employed on any password or other sensitive information. If I open the database using SQLite3 in VSCode, I can see the table under `users` as follows:
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/6.png?ref_type=heads "users table from users.db: plaintext pw")
+![alt text](https://github.com/FridaHaars/inf226/blob/main/CompulsoryAssignment2/static/screenshots/6.png "users table from users.db: plaintext pw")
 
 The passwords are stored in plaintext in the `password` column. 
 There are also no restrictions on password length or contents, so the user is free to have any weak or strong password, or even an empty one. 
@@ -252,7 +251,7 @@ I've implemented password hashing with a salt using the suggested `werkzeug.secu
 
 After implementing the hashing, I get the following contents in the `users` table, where we can see that they are no longer visible in plaintext: 
 
-![alt text](https://git.app.uib.no/inf226/23h/assignment-2/Frida.Harstad_headbook/-/raw/main/static/screenshots/7.png?ref_type=heads "users table from users.db: hashed pw")
+![alt text](https://github.com/FridaHaars/inf226/blob/main/CompulsoryAssignment2/static/screenshots/7.png "users table from users.db: hashed pw")
 
 
 
